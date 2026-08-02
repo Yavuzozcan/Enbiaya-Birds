@@ -22,7 +22,7 @@ class _GamePageState extends State<GamePage> {
 
   double birdY = 0.0;
   double velocity = 0.0;
-  double pipeX = 1.15;
+  double pipeX = 1.70;
   double gapCenter = 0.0;
 
   bool gameStarted = false;
@@ -47,7 +47,7 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       birdY = 0.0;
       velocity = 0.0;
-      pipeX = 1.15;
+      pipeX = 1.70;
       gapCenter = 0.0;
       score = 0;
       gameStarted = true;
@@ -104,10 +104,10 @@ class _GamePageState extends State<GamePage> {
       velocity += gravity;
       birdY += velocity;
 
-      pipeX -= 0.025;
+      pipeX -= 0.018;
 
       if (pipeX < -0.30) {
-        pipeX = 1.15;
+       pipeX = 1.40;
         gapCenter = -0.45 + random.nextDouble() * 0.90;
         score++;
       }
@@ -127,7 +127,7 @@ class _GamePageState extends State<GamePage> {
           birdRight > pipeLeft && birdLeft < pipeRight;
 
       if (touchesPipeHorizontally) {
-        const gapHalf = 0.28;
+        const gapHalf = 0.38;
 
         final gapTop = gapCenter - gapHalf;
         final gapBottom = gapCenter + gapHalf;
@@ -165,7 +165,7 @@ class _GamePageState extends State<GamePage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     const pipeWidth = 74.0;
-    const gapHeight = 220.0;
+    const gapHeight = 300.0;
 
     final gapCenterPx = screenHeight * (gapCenter + 1) / 2;
 
