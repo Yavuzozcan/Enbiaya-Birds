@@ -19,5 +19,5 @@ flutter:
 
   assets:
     - assets/images/enbiya.png
-      - assets/audio/hop.mp3
-  - assets/audio/death.mp3
+    - assets/audio/hop.mp3
+    - assets/audio/death.mp3
