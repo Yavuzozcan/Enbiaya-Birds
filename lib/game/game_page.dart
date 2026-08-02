@@ -105,8 +105,8 @@ class _GamePageState extends State<GamePage> {
 
       pipeX -= 0.018;
 
-      if (pipeX < -0.30) {
-       pipeX = 1.40;
+      if (pipeX < -0.15) {
+       pipeX = 1.05;
         gapCenter = -0.45 + random.nextDouble() * 0.90;
         score++;
       }
