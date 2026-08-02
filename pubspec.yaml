@@ -13,7 +13,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
 
-  flutter:
+flutter:
   uses-material-design: true
 
   assets:
