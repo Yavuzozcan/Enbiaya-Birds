@@ -9,7 +9,7 @@ class Bird extends StatelessWidget {
     super.key,
     required this.left,
     required this.top,
-    this.size = 100,
+    this.size = 90,
   });
 
   @override
