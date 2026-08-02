@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import '../widgets/bird.dart';
 
@@ -14,6 +15,7 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   Timer? gameTimer;
+  final AudioPlayer player = AudioPlayer();
 
   double birdY = 0.0;
   double velocity = 0.0;
@@ -77,7 +79,8 @@ class _GamePageState extends State<GamePage> {
       velocity = jumpPower;
     });
   }
-
+player.play(AssetSource('audio/hop.mp3'));
+  
   void updateGame() {
     setState(() {
       velocity += gravity;
@@ -126,6 +129,8 @@ class _GamePageState extends State<GamePage> {
 
   void finishGame() {
     gameTimer?.cancel();
+
+    player.play(AssetSource('audio/death.mp3'));
 
     setState(() {
       gameOver = true;
