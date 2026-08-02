@@ -16,7 +16,8 @@ class GamePage extends StatefulWidget {
 class _GamePageState extends State<GamePage> {
   Timer? gameTimer;
 
-  final AudioPlayer hopPlayer = AudioPlayer();
+  final AudioPlayer hopPlayer = AudioPlayer()
+  ..setReleaseMode(ReleaseMode.stop);
   final AudioPlayer deathPlayer = AudioPlayer();
   final Random random = Random();
 
@@ -68,11 +69,12 @@ class _GamePageState extends State<GamePage> {
   }
 
   Future<void> playHopSound() async {
-    await hopPlayer.stop();
-    await hopPlayer.play(
-      AssetSource('audio/hop.mp3'),
-    );
-  }
+  await hopPlayer.stop();
+  await hopPlayer.play(
+    AssetSource('audio/hop.mp3'),
+    mode: PlayerMode.lowLatency,
+  );
+}
 
   Future<void> playDeathSound() async {
     await deathPlayer.stop();
@@ -97,7 +99,6 @@ class _GamePageState extends State<GamePage> {
     velocity = jumpPower;
   });
 }
-
   void updateGame() {
     setState(() {
       velocity += gravity;
