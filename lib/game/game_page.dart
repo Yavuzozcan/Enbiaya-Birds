@@ -26,9 +26,8 @@ class _GamePageState extends State<GamePage> {
   final double gravity = 0.0025;
   final double jumpPower = -0.035;
 
-  double pipeX = 1.2;
-  double topPipeHeight = 220;
-  double bottomPipeHeight = 220;
+  double pipeX = 1.15;
+  double gapCenter = 0.0;
 
   final Random random = Random();
 
@@ -44,7 +43,8 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       birdY = 0.0;
       velocity = 0.0;
-      pipeX = 1.2;
+      pipeX = 1.15;
+      gapCenter = 0.0;
       score = 0;
       gameStarted = true;
       gameOver = false;
@@ -83,18 +83,43 @@ class _GamePageState extends State<GamePage> {
       velocity += gravity;
       birdY += velocity;
 
-      pipeX -= 0.012;
+      pipeX -= 0.018;
 
-      if (pipeX < -1.4) {
-        pipeX = 1.2;
+      if (pipeX < -0.35) {
+        pipeX = 1.15;
+        gapCenter = -0.45 + random.nextDouble() * 0.90;
         score++;
-
-        topPipeHeight = 140 + random.nextDouble() * 170;
-        bottomPipeHeight = 140 + random.nextDouble() * 170;
       }
 
-      if (birdY > 0.88 || birdY < -1.0) {
+      if (birdY > 0.82 || birdY < -0.95) {
         finishGame();
+        return;
+      }
+
+      final birdLeft = 0.30;
+      final birdRight = 0.30 + 0.22;
+
+      final pipeLeft = pipeX;
+      final pipeRight = pipeX + 0.18;
+
+      final birdHitsPipeX =
+          birdRight > pipeLeft && birdLeft < pipeRight;
+
+      if (birdHitsPipeX) {
+        const gapHalf = 0.28;
+
+        final gapTop = gapCenter - gapHalf;
+        final gapBottom = gapCenter + gapHalf;
+
+        final birdTop = birdY - 0.11;
+        final birdBottom = birdY + 0.11;
+
+        final insideGap =
+            birdTop > gapTop && birdBottom < gapBottom;
+
+        if (!insideGap) {
+          finishGame();
+        }
       }
     });
   }
@@ -112,6 +137,27 @@ class _GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    const pipeWidth = 74.0;
+    const gapHeight = 220.0;
+
+    final gapCenterPx =
+        screenHeight * (gapCenter + 1) / 2;
+
+    final topPipeHeight =
+        (gapCenterPx - gapHeight / 2).clamp(
+      40.0,
+      screenHeight - 300.0,
+    );
+
+    final bottomPipeTop =
+        gapCenterPx + gapHeight / 2;
+
+    final bottomPipeHeight =
+        (screenHeight - bottomPipeTop - 70).clamp(
+      40.0,
+      screenHeight - 300.0,
+    );
 
     return Scaffold(
       body: GestureDetector(
@@ -134,26 +180,39 @@ class _GamePageState extends State<GamePage> {
 
             Bird(
               left: screenWidth * 0.30,
-              top: screenHeight * (birdY + 1) / 2,
+              top: screenHeight * (birdY + 1) / 2 - 50,
+              size: 100,
             ),
 
             Positioned(
               top: 0,
               left: screenWidth * pipeX,
               child: Container(
-                width: 70,
+                width: pipeWidth,
                 height: topPipeHeight,
-                color: Colors.green,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  border: Border.all(
+                    color: Colors.green.shade900,
+                    width: 3,
+                  ),
+                ),
               ),
             ),
 
             Positioned(
-              bottom: 70,
+              top: bottomPipeTop,
               left: screenWidth * pipeX,
               child: Container(
-                width: 70,
+                width: pipeWidth,
                 height: bottomPipeHeight,
-                color: Colors.green,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  border: Border.all(
+                    color: Colors.green.shade900,
+                    width: 3,
+                  ),
+                ),
               ),
             ),
 
@@ -183,6 +242,7 @@ class _GamePageState extends State<GamePage> {
               const Center(
                 child: Text(
                   'Başlamak için dokun',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
