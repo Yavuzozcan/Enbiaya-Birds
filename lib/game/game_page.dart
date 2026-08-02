@@ -82,22 +82,21 @@ class _GamePageState extends State<GamePage> {
   }
 
   void jump() {
-    if (gameOver) {
-      startGame();
-      playHopSound();
-      return;
-    }
+  playHopSound();
 
-    if (!gameStarted) {
-      startGame();
-    }
-
-    setState(() {
-      velocity = jumpPower;
-    });
-
-    playHopSound();
+  if (gameOver) {
+    startGame();
+    return;
   }
+
+  if (!gameStarted) {
+    startGame();
+  }
+
+  setState(() {
+    velocity = jumpPower;
+  });
+}
 
   void updateGame() {
     setState(() {
