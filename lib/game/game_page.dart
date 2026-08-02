@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import '../widgets/bird.dart';
 
 class GamePage extends StatefulWidget {
@@ -35,7 +37,8 @@ class _GamePageState extends State<GamePage> {
     gameTimer?.cancel();
     super.dispose();
   }
-    void startGame() {
+
+  void startGame() {
     gameTimer?.cancel();
 
     setState(() {
@@ -104,10 +107,15 @@ class _GamePageState extends State<GamePage> {
       gameStarted = false;
     });
   }
-    @override
+
+  @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: jump,
         child: Stack(
           children: [
@@ -124,15 +132,14 @@ class _GamePageState extends State<GamePage> {
               ),
             ),
 
-     Bird(
-  left: MediaQuery.of(context).size.width * 0.30,
-  top: MediaQuery.of(context).size.height * (birdY + 1) / 2,
-),
+            Bird(
+              left: screenWidth * 0.30,
+              top: screenHeight * (birdY + 1) / 2,
             ),
 
             Positioned(
               top: 0,
-              left: MediaQuery.of(context).size.width * pipeX,
+              left: screenWidth * pipeX,
               child: Container(
                 width: 70,
                 height: topPipeHeight,
@@ -141,15 +148,16 @@ class _GamePageState extends State<GamePage> {
             ),
 
             Positioned(
-              bottom: 0,
-              left: MediaQuery.of(context).size.width * pipeX,
+              bottom: 70,
+              left: screenWidth * pipeX,
               child: Container(
                 width: 70,
                 height: bottomPipeHeight,
                 color: Colors.green,
               ),
             ),
-                        Positioned(
+
+            Positioned(
               top: 45,
               left: 0,
               right: 0,
