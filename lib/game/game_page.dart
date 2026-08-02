@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import '../widgets/bird.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -123,22 +124,10 @@ class _GamePageState extends State<GamePage> {
               ),
             ),
 
-            AnimatedAlign(
-              duration: const Duration(milliseconds: 16),
-              alignment: Alignment(-0.4, birdY),
-              child: Container(
-                width: 70,
-                height: 70,
-                decoration: const BoxDecoration(
-                  color: Colors.amber,
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                  size: 42,
-                ),
-              ),
+     Bird(
+  left: MediaQuery.of(context).size.width * 0.30,
+  top: MediaQuery.of(context).size.height * (birdY + 1) / 2,
+),
             ),
 
             Positioned(
