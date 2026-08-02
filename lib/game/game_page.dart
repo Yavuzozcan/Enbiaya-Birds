@@ -180,7 +180,7 @@ class _GamePageState extends State<GamePage> {
 
             Bird(
               left: screenWidth * 0.30,
-              top: screenHeight * (birdY + 1) / 2 - 50,
+              top: screenHeight * (birdY + 1) / 2 - 45,
               size: 90,
             ),
 
