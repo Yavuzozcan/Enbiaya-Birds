@@ -1,24 +1,41 @@
 import 'package:flutter/material.dart';
 
 class Bird extends StatelessWidget {
-  final double y;
+  final double left;
+  final double top;
+  final double size;
 
   const Bird({
     super.key,
-    required this.y,
+    required this.left,
+    required this.top,
+    this.size = 68,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedAlign(
+    return AnimatedPositioned(
       duration: const Duration(milliseconds: 16),
-      alignment: Alignment(-0.4, y),
+      curve: Curves.linear,
+      left: left,
+      top: top,
       child: Container(
-        width: 70,
-        height: 70,
-        decoration: const BoxDecoration(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(
           color: Colors.amber,
           shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white,
+            width: 4,
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
         ),
         child: const Icon(
           Icons.person,
