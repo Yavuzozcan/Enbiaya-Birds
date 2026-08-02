@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 
 import '../widgets/bird.dart';
 
@@ -15,10 +15,15 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   Timer? gameTimer;
-  final AudioPlayer player = AudioPlayer();
+
+  final AudioPlayer hopPlayer = AudioPlayer();
+  final AudioPlayer deathPlayer = AudioPlayer();
+  final Random random = Random();
 
   double birdY = 0.0;
   double velocity = 0.0;
+  double pipeX = 1.15;
+  double gapCenter = 0.0;
 
   bool gameStarted = false;
   bool gameOver = false;
@@ -28,14 +33,11 @@ class _GamePageState extends State<GamePage> {
   final double gravity = 0.0025;
   final double jumpPower = -0.035;
 
-  double pipeX = 1.15;
-  double gapCenter = 0.0;
-
-  final Random random = Random();
-
   @override
   void dispose() {
     gameTimer?.cancel();
+    hopPlayer.dispose();
+    deathPlayer.dispose();
     super.dispose();
   }
 
@@ -65,9 +67,24 @@ class _GamePageState extends State<GamePage> {
     );
   }
 
+  Future<void> playHopSound() async {
+    await hopPlayer.stop();
+    await hopPlayer.play(
+      AssetSource('audio/hop.mp3'),
+    );
+  }
+
+  Future<void> playDeathSound() async {
+    await deathPlayer.stop();
+    await deathPlayer.play(
+      AssetSource('audio/death.mp3'),
+    );
+  }
+
   void jump() {
     if (gameOver) {
       startGame();
+      playHopSound();
       return;
     }
 
@@ -78,9 +95,10 @@ class _GamePageState extends State<GamePage> {
     setState(() {
       velocity = jumpPower;
     });
+
+    playHopSound();
   }
-player.play(AssetSource('audio/hop.mp3'));
-  
+
   void updateGame() {
     setState(() {
       velocity += gravity;
@@ -99,23 +117,23 @@ player.play(AssetSource('audio/hop.mp3'));
         return;
       }
 
-      final birdLeft = 0.30;
-      final birdRight = 0.30 + 0.22;
+      const birdLeft = 0.30;
+      const birdRight = 0.50;
 
       final pipeLeft = pipeX;
       final pipeRight = pipeX + 0.18;
 
-      final birdHitsPipeX =
+      final touchesPipeHorizontally =
           birdRight > pipeLeft && birdLeft < pipeRight;
 
-      if (birdHitsPipeX) {
+      if (touchesPipeHorizontally) {
         const gapHalf = 0.28;
 
         final gapTop = gapCenter - gapHalf;
         final gapBottom = gapCenter + gapHalf;
 
-        final birdTop = birdY - 0.11;
-        final birdBottom = birdY + 0.11;
+        final birdTop = birdY - 0.10;
+        final birdBottom = birdY + 0.10;
 
         final insideGap =
             birdTop > gapTop && birdBottom < gapBottom;
@@ -128,9 +146,12 @@ player.play(AssetSource('audio/hop.mp3'));
   }
 
   void finishGame() {
-    gameTimer?.cancel();
+    if (gameOver) {
+      return;
+    }
 
-    player.play(AssetSource('audio/death.mp3'));
+    gameTimer?.cancel();
+    playDeathSound();
 
     setState(() {
       gameOver = true;
@@ -146,17 +167,14 @@ player.play(AssetSource('audio/hop.mp3'));
     const pipeWidth = 74.0;
     const gapHeight = 220.0;
 
-    final gapCenterPx =
-        screenHeight * (gapCenter + 1) / 2;
+    final gapCenterPx = screenHeight * (gapCenter + 1) / 2;
 
-    final topPipeHeight =
-        (gapCenterPx - gapHeight / 2).clamp(
+    final topPipeHeight = (gapCenterPx - gapHeight / 2).clamp(
       40.0,
       screenHeight - 300.0,
     );
 
-    final bottomPipeTop =
-        gapCenterPx + gapHeight / 2;
+    final bottomPipeTop = gapCenterPx + gapHeight / 2;
 
     final bottomPipeHeight =
         (screenHeight - bottomPipeTop - 70).clamp(
@@ -191,7 +209,7 @@ player.play(AssetSource('audio/hop.mp3'));
 
             Positioned(
               top: 0,
-             left: (screenWidth + 100) * pipeX,
+              left: (screenWidth + 100) * pipeX,
               child: Container(
                 width: pipeWidth,
                 height: topPipeHeight,
@@ -259,7 +277,9 @@ player.play(AssetSource('audio/hop.mp3'));
             if (gameOver)
               Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 35),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 35,
+                  ),
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: Colors.white,
