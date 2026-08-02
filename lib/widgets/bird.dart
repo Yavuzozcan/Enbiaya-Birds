@@ -9,7 +9,7 @@ class Bird extends StatelessWidget {
     super.key,
     required this.left,
     required this.top,
-    this.size = 68,
+    this.size = 72,
   });
 
   @override
@@ -23,7 +23,6 @@ class Bird extends StatelessWidget {
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: Colors.amber,
           shape: BoxShape.circle,
           border: Border.all(
             color: Colors.white,
@@ -37,10 +36,13 @@ class Bird extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(
-          Icons.person,
-          color: Colors.white,
-          size: 42,
+        child: ClipOval(
+          child: Image.asset(
+            'assets/images/enbiya.png',
+            width: size,
+            height: size,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
