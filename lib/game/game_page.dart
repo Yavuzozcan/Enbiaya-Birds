@@ -83,9 +83,9 @@ class _GamePageState extends State<GamePage> {
       velocity += gravity;
       birdY += velocity;
 
-      pipeX -= 0.018;
+      pipeX -= 0.025;
 
-      if (pipeX < -0.35) {
+      if (pipeX < -0.30) {
         pipeX = 1.15;
         gapCenter = -0.45 + random.nextDouble() * 0.90;
         score++;
@@ -186,7 +186,7 @@ class _GamePageState extends State<GamePage> {
 
             Positioned(
               top: 0,
-              left: screenWidth * pipeX,
+             left: (screenWidth + 100) * pipeX,
               child: Container(
                 width: pipeWidth,
                 height: topPipeHeight,
@@ -202,7 +202,7 @@ class _GamePageState extends State<GamePage> {
 
             Positioned(
               top: bottomPipeTop,
-              left: screenWidth * pipeX,
+              left: (screenWidth + 100) * pipeX,
               child: Container(
                 width: pipeWidth,
                 height: bottomPipeHeight,
